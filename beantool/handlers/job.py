@@ -1,6 +1,6 @@
 from beanstalkc import DEFAULT_PRIORITY, DEFAULT_TTR
 
-from beantool.handlers.handler_base import HandlerBase
+from beantool.handlers.handler_base import HandlerBase, catch_notfound
 
 def register_commands(subparsers):
     # job_put
@@ -89,8 +89,12 @@ class JobHandler(HandlerBase):
         self.write_human("Job created:\n")
         self.write_data({ 'job_id': job_id })
 
+    @catch_notfound
     def peek(self, job_id):
-        j = self.get_job_by_id(job_id)
+        j = self.beanstalk.peek(job_id)
+        if j is None:
+            self.write_human("No 'ready' jobs found.")
+            return
 
         self.__dump_job(j)
 
@@ -124,40 +128,54 @@ class JobHandler(HandlerBase):
 
         self.__dump_job(j)
 
-    def reserve(self, tube=None, timeout=None):
-        """Allocate a job to work on. A timeout of None means that the call 
-        will block.
-        """
+#    def reserve(self, tube=None, timeout=None):
+#        """Allocate a job to work on. A timeout of None means that the call 
+#        will block.
+#        """
+#
+#        self.__watch(tube)
+#
+#        j = self.beanstalk.reserve(timeout)
+#        if j is None:
+#            self.write_human("No jobs to reserve.")
+#            return
+#
+#        self.__dump_job(j)
 
-        self.__watch(tube)
-# TODO(dustin): It seems like we can call this many times, rapidly, and get the same job back. Why?
-        j = self.beanstalk.reserve(timeout)
-        if j is None:
-            self.write_human("No jobs to reserve.")
-            return
-
-        self.__dump_job(j)
-
+    @catch_notfound
     def stats(self, job_id):
-        j = self.get_job_by_id(job_id)
+        j = self.build_job(job_id)
 
         self.write_human("Job stats:\n")
         self.write_data(j.stats())
 
+    @catch_notfound
     def delete(self, job_id):
-        j = self.get_job_by_id(job_id)
+        j = self.build_job(job_id)
         j.delete()
 
         self.write_human("Deleted.")
 
-    def release(self, job_id, priority, delay):
-        j = self.get_job_by_id(job_id)
-        j.release(priority=priority, delay=delay)
+# Useless because we lose the reservation after the previous disconnect.
+#    @catch_notfound
+#    def release(self, job_id, priority, delay):
+#        j = self.build_job(job_id)
+#        j.release(priority=priority, delay=delay)
+#
+#        self.write_human("Released.")
 
-        self.write_human("Released.")
+# Useless because we lose the reservation after the previous disconnect.
+#    @catch_notfound
+#    def bury(self, job_id, priority):
+#        j = self.build_job(job_id)
+#        j.bury(priority=priority)
+#
+#        self.write_human("Buried.")
 
-    def bury(self, job_id, priority):
-        j = self.get_job_by_id(job_id)
-        j.bury(priority=priority)
-
-        self.write_human("Buried.")
+# Useless because we lose the reservation after the previous disconnect.
+#    @catch_notfound
+#    def touch(self, job_id):
+#        j = self.build_job(job_id)
+#        j.touch()
+#
+#        self.write_human("Released.")

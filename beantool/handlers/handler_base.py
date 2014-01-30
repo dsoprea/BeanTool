@@ -1,7 +1,25 @@
+import beanstalkc
+
 from sys import stdout, stderr
 from json import dumps
 
-from beanstalkc import Connection, Job as Job
+from beanstalkc import Connection, Job
+
+def catch_notfound(f):
+    """A decorator to produce KeyErrors where necessary."""
+
+    def wrapper(*args, **kwargs):
+        try:
+            return f(*args, **kwargs)
+        except beanstalkc.CommandFailed as e:
+            # Translate a 'NOT_FOUND' error to a KeyError.
+            if issubclass(e.args.__class__, tuple) is True and \
+               e.args[1] == 'NOT_FOUND':
+                raise KeyError()
+
+            raise
+
+    return wrapper
 
 
 class HandlerBase(object):
@@ -27,18 +45,15 @@ class HandlerBase(object):
         stdout.write(data)
         stdout.write("\n")
 
-    def get_job_by_id(self, job_id):
-        j = self.beanstalk.peek(job_id)
-
-        self.check_job_valid(j)
+    def build_job(self, job_id, body=None):
 
         # beanstalkc does a poor job of tracking (or, rather, guessing) whether 
         # or not a job is properly reserved in order to do most things. Not 
         # only does it just not do anything if not reserved, but this state-
-        # tracking doesn't at all work for our use case (one-offs).
-        j.reserved = True
+        # tracking doesn't at all work for our use case (one-offs). We set
+        # 'reserved' to True no matter what.
 
-        return j
+        return Job(self.__b, job_id, body, True)
 
     def check_job_valid(self, job):
         if job is None:
