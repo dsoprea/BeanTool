@@ -42,7 +42,7 @@ def register_commands(subparsers):
 
     # job_stats
 
-    parser_jobstats = subparsers.add_parser('job_stats', help="Get job-level info")
+    parser_jobstats = subparsers.add_parser('job_stats', help="Show job-level info")
     parser_jobstats.add_argument('job_id', type=int, help='ID of specific job')
 
     # job_delete
