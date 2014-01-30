@@ -7,6 +7,14 @@ BeanTool is a console tool for quering your *[beanstalkd](http://kr.github.io/be
 Installation
 ------------
 
+### Install from *pip*
+
+```bash
+$ sudo pip install beantool
+```
+
+### Install manually
+
 1. git clone https://github.com/dsoprea/BeanTool beantool
 2. cd beantool
 3. sudo python setup.py install
@@ -80,22 +88,6 @@ Server stats:
 }
 ```
 
-### server_kick
-
-Kick (requeue) buried job(s)
-
-```bash
-$ bt server_kick
-```
-
-```
-Kicking buried jobs.
-
-{
-  "kicked": 0
-}
-```
-
 ### tube_list
 
 List tubes
@@ -138,6 +130,22 @@ Tube stats:
   "current-jobs-reserved": 0,
   "current-using": 1,
   "current-jobs-urgent": 0
+}
+```
+
+### tube_kick
+
+Kick (requeue) buried job(s)
+
+```bash
+$ bt tube_kick
+```
+
+```
+Kicking buried jobs.
+
+{
+  "kicked": 0
 }
 ```
 
@@ -242,9 +250,144 @@ $ bt job_delete 15
 Deleted.
 ```
 
-Notes
+Jobs Terminal
+-------------
+
+There is one more subcommand not covered above: *job_reserve*
+
+Because a socket disconnect will cause *beanstalkd* to requeue a job reserved by a client, calling *job_reserve* will send the user into the "*jobs terminal*". In this mode, *beantool* will reserve one job, and wait for you to enter a number of commands:
+
+```bash
+$ bt job_reserve 
+```
+
+```
+Requesting job.
+
+Job Terminal
+============
+
+Job with ID (10) has been reserved. You may manipulate it, here.
+
+# Commands:
+#
+#      stats                      Display job information
+#     delete                      Delete job
+#    release [priority] [delay]   Release job back to queue
+#       bury [priority]           Bury job
+#      touch                      Re-lease job
+#       data                      Show job data
+#       help                      Display help
+#       quit                      Quit
+
+-> 
+```
+
+Performing a state-change on the job or explicitly asking to quit will cause the session to close.
+
+
+stats
 -----
 
-1. Human readable text and phrasing is printed to STDERR. Data is printed to STDOUT.
-2. Everything written to STDOUT is encoded as JSON, except for job-bodies.
-3. The tool works by connecting, running one command, and disconnecting. Therefore, jobs can't be reserved, touched, released, buried, etc.., since *beanstalkd* releases jobs automatically when the client disconnects.
+Display job metadata.
+
+```
+-> stats
+```
+
+```
+{'age': 593,
+ 'buries': 0,
+ 'delay': 0,
+ 'file': 0,
+ 'id': 10,
+ 'kicks': 0,
+ 'pri': 2147483648,
+ 'releases': 0,
+ 'reserves': 3,
+ 'state': 'reserved',
+ 'time-left': 77,
+ 'timeouts': 1,
+ 'ttr': 120,
+ 'tube': 'default'}
+ ```
+
+
+delete
+------
+
+Delete/finish the job.
+
+```
+-> delete
+```
+
+```
+Job deleted.
+Job terminal stopped.
+```
+
+
+release
+-------
+
+Requeue the job.
+
+```
+-> release
+```
+
+```
+Job released.
+Job terminal stopped.
+```
+
+
+bury
+----
+
+Exclude the job from being processed.
+
+```
+-> bury
+```
+
+```
+Job buried.
+Job terminal stopped.
+```
+
+
+touch
+-----
+
+Re-lease the job.
+
+```
+-> touch
+```
+
+```
+Job touched.
+```
+
+
+data
+----
+
+Display the job data.
+
+```
+-> data
+```
+
+```
+['string list']
+```
+
+
+Notes
+=====
+
+1. Human readable text and phrasing is printed to STDERR. Data is printed to STDOUT  (does not apply to *Job Terminal*).
+2. Everything written to STDOUT is encoded as JSON, except for job-bodies (does not apply to *Job Terminal*).

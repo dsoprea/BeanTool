@@ -1,6 +1,7 @@
 from beanstalkc import DEFAULT_PRIORITY, DEFAULT_TTR
 
 from beantool.handlers.handler_base import HandlerBase, catch_notfound
+from beantool.job_terminal import JobTerminal
 
 def register_commands(subparsers):
     # job_put
@@ -16,9 +17,9 @@ def register_commands(subparsers):
 
     # job_reserve
 
-#    parser_jobreserve = subparsers.add_parser('job_reserve', help='Reserve a job')
-#    parser_jobreserve.add_argument('-t', '--tube', action='append', help='Tube(s)')
-#    parser_jobreserve.add_argument('-T', '--timeout', type=int, help='Timeout')
+    parser_jobreserve = subparsers.add_parser('job_reserve', help='Reserve a job')
+    parser_jobreserve.add_argument('-t', '--tube', action='append', help='Tube(s)')
+    parser_jobreserve.add_argument('-T', '--timeout', type=int, help='Timeout')
 
     # job_peek
 
@@ -50,22 +51,6 @@ def register_commands(subparsers):
     parser_jobdelete = subparsers.add_parser('job_delete', help="Delete job")
     parser_jobdelete.add_argument('job_id', type=int, help='ID of specific job')
 
-    # job_release
-
-#    parser_jobrelease = subparsers.add_parser('job_release', help="Release job")
-#    parser_jobrelease.add_argument('job_id', type=int, help='ID of specific job')
-#    parser_jobrelease.add_argument('-p', '--priority', type=int, default=DEFAULT_PRIORITY, help='Priority')
-#    parser_jobrelease.add_argument('-d', '--delay', type=int, default=0, help='Delay')
-
-    # job_bury
-
-#    parser_jobbury = subparsers.add_parser('job_bury', help="Bury job")
-#    parser_jobbury.add_argument('job_id', type=int, help='ID of specific job')
-#    parser_jobbury.add_argument('-p', '--priority', type=int, default=DEFAULT_PRIORITY, help='Priority')
-
-    # job_touch
-
-#    Not implemented.
 
 class JobHandler(HandlerBase):
     def __dump_job(self, j):
@@ -132,20 +117,22 @@ class JobHandler(HandlerBase):
 
         self.__dump_job(j)
 
-# Useless because we lose the reservation after the previous disconnect.
-#    def reserve(self, tube=None, timeout=None):
-#        """Allocate a job to work on. A timeout of None means that the call 
-#        will block.
-#        """
-#
-#        self.__watch(tube)
-#
-#        j = self.beanstalk.reserve(timeout)
-#        if j is None:
-#            self.write_human("No jobs to reserve.")
-#            return
-#
-#        self.__dump_job(j)
+    def reserve(self, tube=None, timeout=None):
+        """Allocate a job to work on, and send us into a "command terminal" 
+        with a sustained connection to beanstalkd.
+        """
+
+        self.__watch(tube)
+
+        print("Requesting job.")
+
+        j = self.beanstalk.reserve(timeout)
+        if j is None:
+            self.write_human("No jobs to reserve.")
+            return
+
+        print('')
+        JobTerminal(self.beanstalk, j).run_loop()
 
     @catch_notfound
     def stats(self, job_id):
@@ -160,27 +147,3 @@ class JobHandler(HandlerBase):
         j.delete()
 
         self.write_human("Deleted.")
-
-# Useless because we lose the reservation after the previous disconnect.
-#    @catch_notfound
-#    def release(self, job_id, priority, delay):
-#        j = self.build_job(job_id)
-#        j.release(priority=priority, delay=delay)
-#
-#        self.write_human("Released.")
-
-# Useless because we lose the reservation after the previous disconnect.
-#    @catch_notfound
-#    def bury(self, job_id, priority):
-#        j = self.build_job(job_id)
-#        j.bury(priority=priority)
-#
-#        self.write_human("Buried.")
-
-# Useless because we lose the reservation after the previous disconnect.
-#    @catch_notfound
-#    def touch(self, job_id):
-#        j = self.build_job(job_id)
-#        j.touch()
-#
-#        self.write_human("Released.")
