@@ -5,7 +5,7 @@ from beantool.handlers.handler_base import HandlerBase
 def register_commands(subparsers):
     # server_stats
 
-    parser_serverstats = subparsers.add_parser('server_stats', help='Show server-level statistics')
+    parser_serverstats = subparsers.add_parser('server_stats', help='Show server-level info')
 
     # server_kick
 

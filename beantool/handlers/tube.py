@@ -9,7 +9,7 @@ def register_commands(subparsers):
 
     # tube_stats
 
-    parser_tubestats = subparsers.add_parser('tube_stats', help='Show tube-level statistics')
+    parser_tubestats = subparsers.add_parser('tube_stats', help='Show tube-level info')
     parser_tubestats.add_argument('tube', help='Tube')
 
 
