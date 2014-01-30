@@ -85,6 +85,7 @@ class JobHandler(HandlerBase):
                 self.beanstalk.watch(tube)
 
     def put(self, data, tube, priority, delay, ttr):
+# TODO(dustin): We need to allow for the data to come in via STDIN.
         if tube is not None:
             self.beanstalk.use(tube)
 
@@ -131,6 +132,7 @@ class JobHandler(HandlerBase):
 
         self.__dump_job(j)
 
+# Useless because we lose the reservation after the previous disconnect.
 #    def reserve(self, tube=None, timeout=None):
 #        """Allocate a job to work on. A timeout of None means that the call 
 #        will block.
