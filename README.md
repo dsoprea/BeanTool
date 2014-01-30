@@ -7,6 +7,14 @@ BeanTool is a console tool for quering your *[beanstalkd](http://kr.github.io/be
 Installation
 ------------
 
+### Install from *pip*
+
+```bash
+$ sudo pip install beantool
+```
+
+### Install manually
+
 1. git clone https://github.com/dsoprea/BeanTool beantool
 2. cd beantool
 3. sudo python setup.py install
