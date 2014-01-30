@@ -1,3 +1,5 @@
+from sys import stdout, stderr
+
 from beanstalkc import Connection, Job as Job
 
 class WrappedJob(object):
@@ -16,6 +18,16 @@ class WrappedJob(object):
 class HandlerBase(object):
     def __init__(self, args):
         self.__b = Connection(host=args.hostname, port=args.port)
+
+    def __del__(self):
+        self.__b.close()
+
+    def write_human(self, message):
+        stderr.write(message . "\n")
+
+    def write_data(self, message):
+        stdout.write(message)
+        stderr.write("\n")
 
     def get_job_by_id(self, job_id):
         j = self.beanstalk.peek(job_id)
