@@ -21,7 +21,7 @@ parser.add_argument('-H', '--hostname', default=DEFAULT_HOST,
 parser.add_argument('-p', '--port', default=DEFAULT_PORT, type=int, 
                     help='Beanstalk port')
 
-subparsers = parser.add_subparsers(dest='subcommand', title="job title", description="job desc")
+subparsers = parser.add_subparsers(dest='subcommand', title="Subcommands")
 
 handlers.server.register_commands(subparsers)
 handlers.tube.register_commands(subparsers)
