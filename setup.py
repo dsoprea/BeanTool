@@ -1,26 +1,32 @@
 from setuptools import setup, find_packages
-import sys, os
 
-version = '0.1.0'
+version = '0.2.2'
 
 setup(name='beantool',
       version=version,
       description="A beanstalkd console client.",
       long_description="""\
 A beanstalkd console client.""",
-      classifiers=[], # Get strings from http://pypi.python.org/pypi?%3Aaction=list_classifiers
+      classifiers=[
+            'Development Status :: 3 - Alpha',
+            'Environment :: Console',
+            'Intended Audience :: System Administrators',
+            'License :: OSI Approved :: GNU General Public License v2 (GPLv2)',
+      ],
       keywords='beanstalk beanstalkd queue',
       author='Dustin Oprea',
       author_email='myselfasunder@gmail.com',
-      url='',
+      url='https://github.com/dsoprea/BeanTool',
       license='GPL 2',
       packages=find_packages(exclude=['ez_setup', 'examples', 'tests']),
       include_package_data=True,
       zip_safe=False,
       install_requires=[
-          # -*- Extra requirements: -*-
+            'PyYAML==3.10',
+            'beanstalkc==0.3.0'
       ],
       entry_points="""
       # -*- Entry points: -*-
       """,
+      scripts=['scripts/bt']
       )
