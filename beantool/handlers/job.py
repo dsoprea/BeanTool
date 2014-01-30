@@ -16,9 +16,9 @@ def register_commands(subparsers):
 
     # job_reserve
 
-    parser_jobreserve = subparsers.add_parser('job_reserve', help='Reserve a job')
-    parser_jobreserve.add_argument('-t', '--tube', action='append', help='Tube(s)')
-    parser_jobreserve.add_argument('-T', '--timeout', type=int, help='Timeout')
+#    parser_jobreserve = subparsers.add_parser('job_reserve', help='Reserve a job')
+#    parser_jobreserve.add_argument('-t', '--tube', action='append', help='Tube(s)')
+#    parser_jobreserve.add_argument('-T', '--timeout', type=int, help='Timeout')
 
     # job_peek
 
@@ -52,17 +52,20 @@ def register_commands(subparsers):
 
     # job_release
 
-    parser_jobrelease = subparsers.add_parser('job_release', help="Release job")
-    parser_jobrelease.add_argument('job_id', type=int, help='ID of specific job')
-    parser_jobrelease.add_argument('-p', '--priority', type=int, default=DEFAULT_PRIORITY, help='Priority')
-    parser_jobrelease.add_argument('-d', '--delay', type=int, default=0, help='Delay')
+#    parser_jobrelease = subparsers.add_parser('job_release', help="Release job")
+#    parser_jobrelease.add_argument('job_id', type=int, help='ID of specific job')
+#    parser_jobrelease.add_argument('-p', '--priority', type=int, default=DEFAULT_PRIORITY, help='Priority')
+#    parser_jobrelease.add_argument('-d', '--delay', type=int, default=0, help='Delay')
 
     # job_bury
 
-    parser_jobbury = subparsers.add_parser('job_bury', help="Bury job")
-    parser_jobbury.add_argument('job_id', type=int, help='ID of specific job')
-    parser_jobbury.add_argument('-p', '--priority', type=int, default=DEFAULT_PRIORITY, help='Priority')
+#    parser_jobbury = subparsers.add_parser('job_bury', help="Bury job")
+#    parser_jobbury.add_argument('job_id', type=int, help='ID of specific job')
+#    parser_jobbury.add_argument('-p', '--priority', type=int, default=DEFAULT_PRIORITY, help='Priority')
 
+    # job_touch
+
+#    Not implemented.
 
 class JobHandler(HandlerBase):
     def __dump_job(self, j):
