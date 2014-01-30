@@ -152,18 +152,12 @@ class JobHandler(HandlerBase):
 
     def release(self, job_id, priority, delay):
         j = self.get_job_by_id(job_id)
-
-        print(">>> RELEASE")
         j.release(priority=priority, delay=delay)
-        print("<<< RELEASE")
 
         self.write_human("Released.")
 
     def bury(self, job_id, priority):
         j = self.get_job_by_id(job_id)
-
-        print(">>> BURY")
         j.bury(priority=priority)
-        print("<<< BURY")
 
         self.write_human("Buried.")
