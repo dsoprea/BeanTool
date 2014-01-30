@@ -9,6 +9,11 @@ from beanstalkc import DEFAULT_HOST, DEFAULT_PORT
 
 from beantool import handlers
 
+# TODO(dustin): Add subcommands for 'touch' and 'time-to-run'.
+# TODO(dustin): Add subcommands for job-specific functions, now that we know we can retrieve jobs.
+# TODO(dustin): We're not sure that we're handling errors in each method, effectively.
+# TODO(dustin): Print out a nicer, non-default, top-level help-message.
+
 parser = argparse.ArgumentParser(description='beanstalkd console client.')
 
 parser.add_argument('-H', '--hostname', default=DEFAULT_HOST, 
@@ -16,12 +21,7 @@ parser.add_argument('-H', '--hostname', default=DEFAULT_HOST,
 parser.add_argument('-p', '--port', default=DEFAULT_PORT, type=int, 
                     help='Beanstalk port')
 
-subparsers = parser.add_subparsers(help='Subcommand help', dest='subcommand')
-
-# TODO(dustin): Add subcommands for 'touch' and 'time-to-run'.
-# TODO(dustin): Add subcommands for job-specific functions, now that we know we can retrieve jobs.
-# TODO(dustin): We're not sure that we're handling errors in each method, effectively.
-# TODO(dustin): Can we move these argument configurations to each handler?
+subparsers = parser.add_subparsers(dest='subcommand', title="job title", description="job desc")
 
 handlers.server.register_commands(subparsers)
 handlers.tube.register_commands(subparsers)

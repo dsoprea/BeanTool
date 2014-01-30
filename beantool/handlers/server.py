@@ -1,9 +1,13 @@
-from pprint import pprint
+from pprint import pformat
 
 from beantool.handlers.handler_base import HandlerBase
 
 def register_commands(subparsers):
+    # server_stats
+
     parser_serverstats = subparsers.add_parser('server_stats', help='Show server-level statistics')
+
+    # server_kick
 
     parser_serverkick = subparsers.add_parser('server_kick', help='Kick buried job(s)')
 # TODO(dustin): Does this take a tube?
@@ -12,12 +16,13 @@ def register_commands(subparsers):
 
 class ServerHandler(HandlerBase):
     def stats(self):
-        print("Server stats:")
-        print('')
+        self.write_human("Server stats:\n")
 
-        pprint(self.beanstalk.stats())
+        stats = self.beanstalk.stats()
+        self.write_data(stats)
 
     def kick(self, count):
-        print("Kicking buried jobs.")
+        self.write_human("Kicking buried jobs.\n")
 
-        self.beanstalk.kick(count)
+        kicked = self.beanstalk.kick(count)
+        self.write_data({ 'kicked': kicked })
