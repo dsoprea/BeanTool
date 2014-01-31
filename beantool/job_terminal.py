@@ -18,7 +18,7 @@ _command_map['bury'] = ('command_bury',
                         'Bury job')
 
 _command_map['touch'] = ('command_touch', (), 'Re-lease job')
-_command_map['body'] = ('command_body', (), 'Show job data')
+_command_map['data'] = ('command_data', (), 'Show job data')
 _command_map['help'] = ('command_help', (), 'Display help')
 _command_map['quit'] = ('command_quit', (), 'Quit')
 
@@ -43,7 +43,6 @@ class JobTerminal(object):
         self.__b = beanstalk
         self.__j = job
         self.__is_looping = True
-        self.__is_deleted = False
 
     def __display_help(self):
         print('')
@@ -108,10 +107,7 @@ class JobTerminal(object):
                 print('')
                 self.__is_looping = False
 
-        if self.__is_deleted is True:
-            print("Job terminal stopped.")
-        else:
-            print("Job terminal stopped. Job will be released back to the queue.")
+        print("Job terminal stopped.")
 
     def command_stats(self):
         s = self.__j.stats()
@@ -123,8 +119,6 @@ class JobTerminal(object):
         self.__j.delete()
 
         self.__is_looping = False
-        self.__is_deleted = True
-
         print("Job deleted.")
 
     def command_release(self, priority=None, delay=0):
@@ -153,7 +147,7 @@ class JobTerminal(object):
 
         print("Job touched.\n")
 
-    def command_body(self):
+    def command_data(self):
         print(self.__j.body)
         print('')
 

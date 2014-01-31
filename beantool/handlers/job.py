@@ -131,6 +131,7 @@ class JobHandler(HandlerBase):
             self.write_human("No jobs to reserve.")
             return
 
+        print('')
         JobTerminal(self.beanstalk, j).run_loop()
 
     @catch_notfound
