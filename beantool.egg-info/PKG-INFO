@@ -1,6 +1,6 @@
 Metadata-Version: 1.1
 Name: beantool
-Version: 0.2.8
+Version: 0.2.9
 Summary: A beanstalkd console client.
 Home-page: https://github.com/dsoprea/BeanTool
 Author: Dustin Oprea
