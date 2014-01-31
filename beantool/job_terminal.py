@@ -1,5 +1,6 @@
 import re
 import json
+import phpserialize
 
 from collections import OrderedDict
 from pprint import pprint
@@ -19,7 +20,8 @@ _command_map['bury'] = ('command_bury',
 
 _command_map['touch'] = ('command_touch', (), 'Re-lease job')
 _command_map['data'] = ('command_data', (), 'Show job data')
-_command_map['json'] = ('command_json', (), 'Decode and display JSON job data')
+_command_map['json'] = ('command_json', ('key',), 'Decode and display JSON data')
+_command_map['php'] = ('command_php', ('key',), 'Decode and display PHP data')
 _command_map['help'] = ('command_help', (), 'Display help')
 _command_map['quit'] = ('command_quit', (), 'Quit')
 
@@ -152,15 +154,38 @@ class JobTerminal(object):
         print(self.__j.body)
         print('')
 
-    def command_json(self):
+    def __decode_and_dump(self, data, key=None):
+        if key is not None:
+            try:
+                parts = key.split('.')
+                i = 0
+                for part in parts:
+                    data = data[part]
+                    i += 1
+            except KeyError:
+                self.__display_error("Key part (%d) is not valid." % (i))
+                return;
+
+        pprint(data)
+        print('')
+
+    def command_json(self, key=None):
         try:
             data = json.loads(self.__j.body)
         except ValueError:
             self.__display_error("Data is not valid JSON.")
             return
 
-        pprint(data)
-        print('')
+        self.__decode_and_dump(data, key)
+
+    def command_php(self, key=None):
+        try:
+            data = phpserialize.loads(self.__j.body)
+        except ValueError:
+            self.__display_error("Data is not valid, serialized PHP.")
+            return
+
+        self.__decode_and_dump(data, key)
 
     def command_help(self):
         self.__display_help()

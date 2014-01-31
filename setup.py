@@ -1,6 +1,6 @@
 from setuptools import setup, find_packages
 
-version = '0.2.8'
+version = '0.2.11'
 
 setup(name='beantool',
       version=version,
@@ -23,7 +23,8 @@ A beanstalkd console client.""",
       zip_safe=False,
       install_requires=[
             'PyYAML==3.10',
-            'beanstalkc==0.3.0'
+            'beanstalkc==0.3.0',
+            'phpserialize==1.3'
       ],
       entry_points="""
       # -*- Entry points: -*-
