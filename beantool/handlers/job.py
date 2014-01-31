@@ -1,3 +1,5 @@
+import sys
+
 from beanstalkc import DEFAULT_PRIORITY, DEFAULT_TTR
 
 from beantool.handlers.handler_base import HandlerBase, catch_notfound
@@ -13,7 +15,7 @@ def register_commands(subparsers):
     parser_jobput.add_argument('-r', '--ttr', default=DEFAULT_TTR, type=int, 
                                help='TTR')
     parser_jobput.add_argument('-d', '--delay', default=0, type=int, help='Delay')
-    parser_jobput.add_argument('data', help='Job data')
+    parser_jobput.add_argument('data', help="Job data ('-' to read from STDIN)")
 
     # job_reserve
 
@@ -70,9 +72,11 @@ class JobHandler(HandlerBase):
                 self.beanstalk.watch(tube)
 
     def put(self, data, tube, priority, delay, ttr):
-# TODO(dustin): We need to allow for the data to come in via STDIN.
         if tube is not None:
             self.beanstalk.use(tube)
+
+        if data == '-':
+            data = sys.stdin.read()
 
         job_id = self.beanstalk.put(data, priority, delay, ttr)
         self.write_human("Job created:\n")
