@@ -11,6 +11,9 @@ from beanstalkc import DEFAULT_HOST, DEFAULT_PORT
 from beantool import handlers
 
 # TODO(dustin): Print out a nicer, non-default, top-level help-message.
+# TODO(dustin): Write a "terminal" subcommand, whereby we can execute successive commands, by hand, 
+#               against the same connection (which will allow us to reserve, touch, bury, release, 
+#               etc..).
 
 parser = argparse.ArgumentParser(description='beanstalkd console client.')
 argcomplete.autocomplete(parser)
