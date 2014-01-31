@@ -286,8 +286,7 @@ Job with ID (10) has been reserved. You may manipulate it, here.
 Performing a state-change on the job or explicitly asking to quit will cause the session to close.
 
 
-stats
------
+### stats
 
 Display job metadata.
 
@@ -313,8 +312,7 @@ Display job metadata.
  ```
 
 
-delete
-------
+### delete
 
 Delete/finish the job.
 
@@ -328,8 +326,7 @@ Job terminal stopped.
 ```
 
 
-release
--------
+### release
 
 Requeue the job.
 
@@ -343,10 +340,9 @@ Job terminal stopped.
 ```
 
 
-bury
-----
+### bury
 
-Exclude the job from being processed.
+Exclude the job from being processed in the future.
 
 ```
 -> bury
@@ -358,8 +354,7 @@ Job terminal stopped.
 ```
 
 
-touch
------
+### touch
 
 Re-lease the job.
 
@@ -372,8 +367,7 @@ Job touched.
 ```
 
 
-data
-----
+### data
 
 Display the job data.
 
@@ -382,7 +376,7 @@ Display the job data.
 ```
 
 ```
-['string list']
+['string 1', 'string 2']
 ```
 
 
