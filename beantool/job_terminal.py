@@ -1,5 +1,5 @@
 import re
-#import readline
+import json
 
 from collections import OrderedDict
 from pprint import pprint
@@ -19,6 +19,7 @@ _command_map['bury'] = ('command_bury',
 
 _command_map['touch'] = ('command_touch', (), 'Re-lease job')
 _command_map['data'] = ('command_data', (), 'Show job data')
+_command_map['json'] = ('command_json', (), 'Decode and display JSON job data')
 _command_map['help'] = ('command_help', (), 'Display help')
 _command_map['quit'] = ('command_quit', (), 'Quit')
 
@@ -149,6 +150,16 @@ class JobTerminal(object):
 
     def command_data(self):
         print(self.__j.body)
+        print('')
+
+    def command_json(self):
+        try:
+            data = json.loads(self.__j.body)
+        except ValueError:
+            self.__display_error("Data is not valid JSON.")
+            return
+
+        pprint(data)
         print('')
 
     def command_help(self):
