@@ -4,7 +4,6 @@ import sys
 sys.path.insert(0, '..')
 
 import argparse
-import argcomplete
 
 from beanstalkc import DEFAULT_HOST, DEFAULT_PORT
 
@@ -16,7 +15,6 @@ from beantool import handlers
 #               etc..).
 
 parser = argparse.ArgumentParser(description='beanstalkd console client.')
-argcomplete.autocomplete(parser)
 
 parser.add_argument('-H', '--hostname', default=DEFAULT_HOST, 
                     help='Beanstalk hostname')
