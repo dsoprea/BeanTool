@@ -250,12 +250,12 @@ $ bt job_delete 15
 Deleted.
 ```
 
-Jobs Terminal
+Job Terminal
 -------------
 
 There is one more subcommand not covered above: *job_reserve*
 
-Because a socket disconnect will cause *beanstalkd* to requeue a job reserved by a client, calling *job_reserve* will send the user into the "*jobs terminal*". In this mode, *beantool* will reserve one job, and wait for you to enter a number of commands:
+Because a socket disconnect will cause *beanstalkd* to requeue a job reserved by a client, calling *job_reserve* will send the user into the "*job terminal*". In this mode, *beantool* will reserve one job, and wait for you to enter a number of commands:
 
 ```bash
 $ bt job_reserve 
