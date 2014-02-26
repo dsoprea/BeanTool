@@ -29,6 +29,9 @@ class TubeHandler(HandlerBase):
     def stats(self, tube):
         self.write_human("Tube stats:\n")
 
+# TODO(dustin): If the tube doesn't exist, you'll get an exception:
+#   beanstalkc.CommandFailed: ('stats-tube', 'NOT_FOUND', [])
+
         stats = self.beanstalk.stats_tube(tube)
         self.write_data(stats)
 

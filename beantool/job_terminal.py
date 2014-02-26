@@ -92,6 +92,7 @@ class JobTerminal(object):
 
                 if command not in _command_map:
                     self.__display_error("Command not valid: %s" % (command))
+                    continue
 
                 params = params.strip()
                 if params != '':
