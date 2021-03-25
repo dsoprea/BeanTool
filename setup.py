@@ -22,7 +22,7 @@ A beanstalkd console client.""",
       include_package_data=True,
       zip_safe=False,
       install_requires=[
-            'PyYAML==3.10',
+            'PyYAML==5.4',
             'beanstalkc==0.3.0',
             'phpserialize==1.3'
       ],
